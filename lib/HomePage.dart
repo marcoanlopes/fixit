@@ -12,26 +12,90 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text('Página Inicial'),
       ),
       drawer: NavBar(),
-      body: Center(
-        child: Container(
-          height: 80,
-          width: 150,
-          decoration: BoxDecoration(
-              color: Colors.blue, borderRadius: BorderRadius.circular(10)),
-          child: FlatButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text(
-              'Welcome',
-              style: TextStyle(color: Colors.white, fontSize: 25),
-            ),
-          ),
-        ),
-      ),
+      body: _body(),
+      // body: BottomNavBar(),
     );
   }
+}
+
+_body() {
+  return SingleChildScrollView(
+    child: Container(
+      padding: EdgeInsets.all(10.0),
+      child: Center(
+        child: Column(
+          children: <Widget>[
+            Card(
+              color: Colors.green[400],
+              child: Container(
+                padding: EdgeInsets.all(32.0),
+                child: Column(
+                  children: <Widget>[
+                    // Image.network(
+                    //     "https://flutter.io/images/catalog-widget-placeholder.png"),
+                    Divider(),
+                    Text('card 1')
+                  ],
+                ),
+              ),
+            ),
+            Card(
+              color: Colors.orange[400],
+              child: Container(
+                padding: EdgeInsets.all(32.0),
+                child: Column(
+                  children: <Widget>[Divider(), Text('card 2')],
+                ),
+              ),
+            ),
+            Card(
+              color: Colors.blueGrey[400],
+              child: Container(
+                padding: EdgeInsets.all(32.0),
+                child: Column(
+                  children: <Widget>[
+                    Text("card 3"),
+                    Divider(),
+                    Text('after divider'),
+                    ButtonBar(
+                      children: <Widget>[
+                        TextButton(
+                          child: const Text(
+                            'Detalhes',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                          onPressed: () {},
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Card(
+              color: Colors.yellow[400],
+              child: Container(
+                padding: EdgeInsets.all(32.0),
+                child: Column(
+                  children: <Widget>[
+                    // Image.network(
+                    //     "https://flutter.io/images/catalog-widget-placeholder.png"),
+                    Divider(),
+                    Text('card 4')
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }

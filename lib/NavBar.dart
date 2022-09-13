@@ -30,38 +30,23 @@ class NavBar extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.loupe_rounded),
-            title: Text('Criar OS'),
+            title: Text('Ordem de Serviço'),
             onTap: () {
               context;
-              Navigator.pushNamed(context, '/NewSOPage');
+              Navigator.pushNamed(context, '/ServiceOrderPage');
             },
           ),
           ListTile(
             leading: Icon(Icons.person),
-            title: Text('Friends'),
+            title: Text('Clientes'),
             onTap: () {
               context;
-              Navigator.pushNamed(context, '/Login');
+              Navigator.pushNamed(context, '/CustomerPage');
             },
           ),
           ListTile(
-            leading: Icon(Icons.share),
-            title: Text('Share'),
-            onTap: () => null,
-          ),
-          ListTile(
-            leading: Icon(Icons.notifications),
-            title: Text('Request'),
-          ),
-          Divider(),
-          ListTile(
             leading: Icon(Icons.settings),
             title: Text('Settings'),
-            onTap: () => null,
-          ),
-          ListTile(
-            leading: Icon(Icons.description),
-            title: Text('Policies'),
             onTap: () => null,
           ),
           Divider(),

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 
+import 'BranchPage.dart';
+import 'CustomerPage.dart';
 import 'HomePage.dart';
-import 'NewSOPage.dart';
-// import 'oldmain.dart';
+import 'ServiceOrderPage.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,8 +20,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/HomePage': (context) => HomePage(),
         '/Login': (context) => Login(),
-        '/NewSOPage': (context) => NewSOPage(),
-        // '/secondScreen': (context) => SecondScreen()
+        '/ServiceOrderPage': (context) => ServiceOrderPage(),
+        '/CustomerPage': (context) => CustomerPage(),
+        '/BranchPage': (context) => BranchPage(),
       },
       home: Login(),
     );
@@ -47,15 +51,11 @@ class _LoginState extends State<Login> {
                 child: Container(
                     width: 200,
                     height: 150,
-                    /*decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(50.0)),*/
                     child: Image.asset('asset/images/FixIt.png')),
               ),
             ),
             Padding(
-              //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
-              padding: EdgeInsets.symmetric(horizontal: 15),
+              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
               child: TextField(
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -65,12 +65,11 @@ class _LoginState extends State<Login> {
             ),
             Padding(
               padding: const EdgeInsets.only(
-                left: 15.0,
-                right: 15.0,
-                top: 15,
+                left: 40.0,
+                right: 40.0,
+                top: 10,
                 bottom: 0,
               ),
-              //padding: EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
                 obscureText: true,
                 decoration: InputDecoration(
@@ -79,7 +78,7 @@ class _LoginState extends State<Login> {
                     hintText: 'Digite sua senha'),
               ),
             ),
-            FlatButton(
+            TextButton(
               onPressed: () {
                 //TODO FORGOT PASSWORD SCREEN GOES HERE
               },
@@ -93,9 +92,9 @@ class _LoginState extends State<Login> {
               width: 250,
               decoration: BoxDecoration(
                   color: Colors.blue, borderRadius: BorderRadius.circular(20)),
-              child: FlatButton(
+              child: TextButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/HomePage');
+                  Navigator.pushNamed(context, '/BranchPage');
                 },
                 child: Text(
                   'Login',
@@ -104,7 +103,7 @@ class _LoginState extends State<Login> {
               ),
             ),
             SizedBox(
-              height: 130,
+              height: 120,
             ),
             Text('Novo usuário? Criar conta nova')
           ],
