@@ -26,36 +26,39 @@ _body(context) {
       child: Center(
         child: Column(
           children: <Widget>[
-            Card(
-              elevation: 5,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              color: Colors.green[400],
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 60),
-                child: Column(
-                  children: <Widget>[
-                    // Image.network(
-                    //     "https://flutter.io/images/catalog-widget-placeholder.png"),
-                    ButtonBar(
-                      alignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        TextButton(
-                          child: const Text(
-                            'Branch: Fix IT - 1',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 26.0,
+            GestureDetector(
+              onTap: () => Navigator.pushNamed(context, '/HomePage'),
+              child: Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                color: Colors.green[400],
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 60),
+                  child: Column(
+                    children: <Widget>[
+                      // Image.network(
+                      //     "https://flutter.io/images/catalog-widget-placeholder.png"),
+                      ButtonBar(
+                        alignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          TextButton(
+                            child: const Text(
+                              'Branch: FixIT - 1',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 26.0,
+                              ),
                             ),
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/HomePage');
+                            },
                           ),
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/HomePage');
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -76,7 +79,7 @@ _body(context) {
                       children: <Widget>[
                         TextButton(
                           child: const Text(
-                            'Branch: Fix IT - 2',
+                            'Branch: FixIT - 2',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 26.0,

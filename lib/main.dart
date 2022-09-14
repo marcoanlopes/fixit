@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'BranchPage.dart';
 import 'CustomerPage.dart';
 import 'HomePage.dart';
+import 'PendingServiceOrderPage.dart';
 import 'ServiceOrderPage.dart';
+import 'FinishedServiceOrderPage.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,6 +25,8 @@ class MyApp extends StatelessWidget {
         '/ServiceOrderPage': (context) => ServiceOrderPage(),
         '/CustomerPage': (context) => CustomerPage(),
         '/BranchPage': (context) => BranchPage(),
+        '/FinishedServiceOrderPage': (context) => FinishedServiceOrderPage(),
+        '/PendingServiceOrderPage': (context) => PendingServiceOrderPage(),
       },
       home: Login(),
     );

@@ -65,7 +65,7 @@ class SearchOS extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 40, vertical: 30),
-            child: Text("Encontrar Ordem de Serviço.."),
+            child: Text("Encontrar Ordem de Serviço"),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 0),
@@ -80,7 +80,7 @@ class SearchOS extends StatelessWidget {
             padding: const EdgeInsets.all(30.0),
             child: Container(
               height: 50,
-              width: 50,
+              width: 94,
               child: TextButton(
                 style: TextButton.styleFrom(
                   primary: Colors.white,
@@ -91,7 +91,9 @@ class SearchOS extends StatelessWidget {
                     borderRadius: BorderRadius.circular(30.0),
                   ),
                 ),
-                child: Icon(Icons.search),
+                child: Row(
+                  children: const [Icon(Icons.search), Text('Procurar')],
+                ),
                 onPressed: () {},
                 // child: FloatingActionButton(
                 //   tooltip: 'Search',
