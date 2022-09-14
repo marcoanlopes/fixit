@@ -13,10 +13,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   static List<Widget> _pages = <Widget>[
     CreateOS(),
     SearchOS(),
-    Icon(
-      Icons.note_alt_rounded,
-      size: 150,
-    ),
+    ListOS(),
   ];
 
   void _onItemTapped(int index) {
@@ -48,6 +45,31 @@ class _BottomNavBarState extends State<BottomNavBar> {
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
+      ),
+    );
+  }
+}
+
+class ListOS extends StatelessWidget {
+  const ListOS({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ListView(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 30),
+            child: Text(
+              "Lista de Ordem de Serviço",
+              style: TextStyle(fontSize: 20),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          _card(),
+        ],
       ),
     );
   }
@@ -132,4 +154,40 @@ class CreateOS extends StatelessWidget {
       ),
     );
   }
+}
+
+_card() {
+  return Card(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(15.0),
+    ),
+    color: Colors.green[200],
+    elevation: 10,
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        const ListTile(
+          leading: Icon(Icons.album, size: 60),
+          title: Text('Exemplo', style: TextStyle(fontSize: 20.0)),
+          subtitle: Text('Conserto finalizado dia dd/mm/aaaa',
+              style: TextStyle(fontSize: 14.0)),
+        ),
+        Divider(
+          color: Colors.black,
+          height: 30,
+          thickness: 0,
+          indent: 20,
+          endIndent: 20,
+        ),
+        ButtonBar(
+          children: <Widget>[
+            ElevatedButton(
+              child: const Text('Ir para OS'),
+              onPressed: () {/* ... */},
+            ),
+          ],
+        ),
+      ],
+    ),
+  );
 }
