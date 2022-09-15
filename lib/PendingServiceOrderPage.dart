@@ -43,13 +43,14 @@ Card buildCardPhone() {
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(15.0),
     ),
-    color: Colors.green[200],
+    color: Colors.orange[300],
     elevation: 10,
     child: Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         const ListTile(
-          leading: Icon(Icons.album, size: 60),
+          // leading: Icon(Icons.album, size: 60),
+          leading: Icon(Icons.phone_android, size: 60),
           title: Text('iPhone X', style: TextStyle(fontSize: 20.0)),
           subtitle: Text('Conserto pendente desde o dia 25/07/2022',
               style: TextStyle(fontSize: 14.0)),
@@ -79,13 +80,13 @@ Card buildCardNote() {
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(15.0),
     ),
-    color: Colors.green[200],
+    color: Colors.orange[300],
     elevation: 10,
     child: Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         const ListTile(
-          leading: Icon(Icons.album, size: 60),
+          leading: Icon(Icons.laptop, size: 60),
           title: Text('MacBook Air', style: TextStyle(fontSize: 20.0)),
           subtitle: Text('Conserto Pendente desde o dia 23/08/2022',
               style: TextStyle(fontSize: 14.0)),
@@ -115,7 +116,7 @@ Card buildCard() {
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(15.0),
     ),
-    color: Colors.green[200],
+    color: Colors.orange[300],
     elevation: 10,
     child: Column(
       mainAxisSize: MainAxisSize.min,
