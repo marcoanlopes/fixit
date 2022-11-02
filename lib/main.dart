@@ -17,11 +17,11 @@ void main() async {
   await Parse().initialize(keyApplicationId, keyParseServerUrl,
       clientKey: keyClientKey, autoSendSessionId: true);
 
-  var firstObject = ParseObject('NewClass')
-    ..set('message', 'Primeira mensagem enviada pelo desktop');
-  await firstObject.save();
+  // var firstObject = ParseObject('NewClass')
+  //   ..set('message', 'Primeira mensagem enviada pelo desktop');
+  // await firstObject.save();
 
-  print('done');
+  // print('done');
 
   runApp(MyApp());
 }
