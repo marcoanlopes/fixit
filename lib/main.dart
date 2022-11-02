@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 import 'BranchPage.dart';
 import 'CustomerPage.dart';
@@ -7,7 +8,21 @@ import 'PendingServiceOrderPage.dart';
 import 'ServiceOrderPage.dart';
 import 'FinishedServiceOrderPage.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final keyApplicationId = 'S7YhLq56bTmBhlAXSZdMWkWd39rPxB2P2uzj9vco';
+  final keyClientKey = 'bqHWaZb31krY9ndaCbaS4F8TQ24kpDLG3p4B2yg1';
+  final keyParseServerUrl = 'https://parseapi.back4app.com';
+
+  await Parse().initialize(keyApplicationId, keyParseServerUrl,
+      clientKey: keyClientKey, autoSendSessionId: true);
+
+  var firstObject = ParseObject('NewClass')
+    ..set('message', 'Primeira mensagem enviada pelo desktop');
+  await firstObject.save();
+
+  print('done');
+
   runApp(MyApp());
 }
 
