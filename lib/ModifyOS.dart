@@ -380,7 +380,7 @@ class _ModifyOSState extends State<ModifyOS> {
 
     final nomeCliente = TextEditingController();
     final produto = TextEditingController();
-    String status = "";
+    String status = varStatus;
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -396,15 +396,25 @@ class _ModifyOSState extends State<ModifyOS> {
                       decoration: InputDecoration(
                         labelText: 'Name',
                       ),
-                      // initialValue: varNomeCliente,
-                      controller: nomeCliente,
+                      onChanged: (value) {
+                        setState(() {
+                          varNomeCliente = value.toString();
+                        });
+                      },
+                      //controller: nomeCliente,
+                      initialValue: varNomeCliente,
                     ),
                     TextFormField(
                       decoration: InputDecoration(
                         labelText: 'Produto',
                       ),
-                      //  initialValue: varProduto,
-                      controller: produto,
+                      onChanged: (value) {
+                        setState(() {
+                          varProduto = value.toString();
+                        });
+                      },
+                      //controller: produto,
+                      initialValue: varProduto,
                     ),
                     DropdownButtonFormField(
                       decoration: InputDecoration(
@@ -439,8 +449,8 @@ class _ModifyOSState extends State<ModifyOS> {
                   child: Text("Submit"),
                   onPressed: () async {
                     ordemServico novaOrdemServico = ordemServico(
-                        nomeCliente: nomeCliente.text,
-                        produto: produto.text,
+                        nomeCliente: varNomeCliente,
+                        produto: varProduto,
                         descricao: varDescricao,
                         observacao: varObservacao,
                         status: status);
