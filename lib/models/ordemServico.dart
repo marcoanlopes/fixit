@@ -1,12 +1,29 @@
-class ordemServico {
-  int? id;
-  String? nomeCliente;
-  String? produto;
-  String? descricao;
-  String? observacao;
-  String? status;
+import 'package:mobx/mobx.dart';
 
-  ordemServico({
+// class ordemServico {
+//   int? id;
+//   String? nomeCliente;
+//   String? produto;
+//   String? descricao;
+//   String? observacao;
+//   String? status;
+
+//   ordemServico({
+//     this.id,
+//     this.nomeCliente,
+//     this.produto,
+//     this.descricao,
+//     this.observacao,
+//     this.status,
+//   });
+// }
+
+part 'ordemServico.g.dart';
+
+class ordemServico = _ordemServico with _$ordemServico;
+
+abstract class _ordemServico with Store {
+  _ordemServico({
     this.id,
     this.nomeCliente,
     this.produto,
@@ -15,24 +32,26 @@ class ordemServico {
     this.status,
   });
 
-  ordemServico.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    nomeCliente = json['nome'];
-    produto = json['produto'];
-    descricao = json['descricao'];
-    observacao = json['observacao'];
-    status = json['status'];
-  }
+  int? id;
+  @observable
+  String? nomeCliente;
+  @observable
+  String? produto;
+  @observable
+  String? descricao;
+  @observable
+  String? observacao;
+  @observable
+  String? status;
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['nome'] = this.nomeCliente;
-    data['produto'] = this.produto;
-    data['descricao'] = this.descricao;
-    data['observacao'] = this.observacao;
-    data['status'] = this.status;
-
-    return data;
-  }
+  @action
+  void setNomeCliente(String? value) => nomeCliente = value;
+  @action
+  void setProduto(String? value) => produto = value;
+  @action
+  void setDescricao(String? value) => descricao = value;
+  @action
+  void setObservacao(String? value) => observacao = value;
+  @action
+  void setStatus(String? value) => status = value;
 }

@@ -2,8 +2,6 @@ import 'package:fixit/FindResultPage.dart';
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
-import 'models/ordemServico.dart';
-
 class FindOS extends StatefulWidget {
   FindOS({
     Key? key,

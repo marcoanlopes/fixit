@@ -566,6 +566,6 @@ Future<void> updateOrdemServico(
 }
 
 Future<void> deleteOrdemServico(String id) async {
-  var todo = ParseObject('OrdemServico')..objectId = id;
-  await todo.delete();
+  var ordemServico = ParseObject('OrdemServico')..objectId = id;
+  await ordemServico.delete();
 }
