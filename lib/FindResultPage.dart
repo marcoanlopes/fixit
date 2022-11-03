@@ -12,6 +12,9 @@ class FindResultPage extends StatefulWidget {
 class _FindResultPage extends State<FindResultPage> {
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+    final nomeCliente = args['nomeCliente'];
+    //print(nomeCliente);
     return Scaffold(
       appBar: AppBar(
         title: Text('Resultado da busca'),
@@ -62,7 +65,7 @@ class _FindResultPage extends State<FindResultPage> {
                                 final varStatus = varOrdemServico.get('status');
                                 final varId = varOrdemServico.get('objectId');
                                 //*************************************
-                                print(varNomeCliente);
+                                //print(varNomeCliente);
                                 return Container(
                                   child: Padding(
                                     padding: EdgeInsets.all(0.0),
@@ -73,7 +76,8 @@ class _FindResultPage extends State<FindResultPage> {
                                           Padding(
                                             padding: EdgeInsets.all(5.0),
                                           ),
-                                          if (varNomeCliente == "Cliente4") ...[
+                                          if (varNomeCliente ==
+                                              nomeCliente) ...[
                                             _card(
                                                 varNomeCliente,
                                                 varProduto,
