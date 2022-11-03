@@ -88,7 +88,8 @@ class CreateOS extends StatelessWidget {
                         nomeCliente: nomeCliente.text,
                         produto: produto.text,
                         descricao: descricao.text,
-                        observacao: observacao.text);
+                        observacao: observacao.text,
+                        status: "Pendente");
                     // print(os.nomeCliente);
                     // print(os.produto);
                     // print(os.descricao);
@@ -123,7 +124,8 @@ class CreateOS extends StatelessWidget {
       ..set('nomeCliente', os.nomeCliente)
       ..set('produto', os.produto)
       ..set('descricao', os.descricao)
-      ..set('observacao', os.observacao);
+      ..set('observacao', os.observacao)
+      ..set('status', os.status);
     await ordemServicoObject.save();
   }
 }

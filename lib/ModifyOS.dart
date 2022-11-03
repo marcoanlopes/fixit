@@ -1,3 +1,4 @@
+import 'package:fixit/models/ordemServico.dart';
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
@@ -56,6 +57,7 @@ class _ModifyOSState extends State<ModifyOS> {
                                     varOrdemServico.get('observacao');
                                 final varDescricao =
                                     varOrdemServico.get('descricao');
+                                final varStatus = varOrdemServico.get('status');
                                 final varId = varOrdemServico.get('objectId');
                                 //*************************************
 
@@ -69,12 +71,30 @@ class _ModifyOSState extends State<ModifyOS> {
                                           Padding(
                                             padding: EdgeInsets.all(5.0),
                                           ),
-                                          _card(
-                                              varNomeCliente,
-                                              varProduto,
-                                              varDescricao,
-                                              varObservacao,
-                                              varId),
+                                          if (varStatus == "Pendente") ...[
+                                            _card(
+                                                varNomeCliente,
+                                                varProduto,
+                                                varDescricao,
+                                                varObservacao,
+                                                varId,
+                                                varStatus)
+                                          ] else if (varStatus ==
+                                              "Fechado") ...[
+                                            _closedCard(
+                                                varNomeCliente,
+                                                varProduto,
+                                                varDescricao,
+                                                varObservacao,
+                                                varId,
+                                                varStatus)
+                                          ]
+                                          // _card(
+                                          //     varNomeCliente,
+                                          //     varProduto,
+                                          //     varDescricao,
+                                          //     varObservacao,
+                                          //     varId),
                                         ],
                                       ),
                                     ),
@@ -223,81 +243,219 @@ class _ModifyOSState extends State<ModifyOS> {
 //   }
 // }
 
-  Future<List<ParseObject>> getOrdemServico() async {
-    QueryBuilder<ParseObject> queryTodo =
-        QueryBuilder<ParseObject>(ParseObject('OrdemServico'));
-    final ParseResponse apiResponse = await queryTodo.query();
-
-    if (apiResponse.success && apiResponse.results != null) {
-      return apiResponse.results as List<ParseObject>;
-    } else {
-      return [];
-    }
-  }
-
-  Future<void> updateOrdemServico(String id, bool done) async {
-    await Future.delayed(Duration(seconds: 1), () {});
-  }
-
-  Future<void> deleteOrdemServico(String id) async {
-    var todo = ParseObject('OrdemServico')..objectId = id;
-    await todo.delete();
-  }
-
-  _card(varNomeCliente, varProduto, varDescricao, varObservacao, varId) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      color: Colors.green[200],
-      elevation: 10,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          ListTile(
-            leading: Icon(Icons.laptop_mac, size: 60),
-            title: Text("Cliente: " + varNomeCliente,
-                style: TextStyle(fontSize: 20.0)),
-            subtitle: Text("Aparelho: " + varProduto,
-                style: TextStyle(fontSize: 14.0)),
-          ),
-          Divider(
-            color: Colors.black,
-            height: 30,
-            thickness: 0,
-            indent: 20,
-            endIndent: 20,
-          ),
-          ButtonBar(
-            children: <Widget>[
-              ElevatedButton(
-                child: const Text('Ir para OS'),
-                onPressed: () {/* ... */},
-              ),
-              ElevatedButton(
-                child: const Text('Deletar OS'),
-                onPressed: () async {
-                  await deleteOrdemServico(varId!);
-                  setState(() {
-                    final snackBar = SnackBar(
-                      content: Text("Todo deleted!"),
-                      duration: Duration(seconds: 2),
-                    );
-                    ScaffoldMessenger.of(context)
-                      ..removeCurrentSnackBar()
-                      ..showSnackBar(snackBar);
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.red, // background
-                  onPrimary: Colors.white, // foreground
+  _card(varNomeCliente, varProduto, varDescricao, varObservacao, varId,
+      varStatus) {
+    return GestureDetector(
+      // CRIAR AQUI O BOTÃO PARA ABRIR DETALHES DA OS
+      // EXEMPLO PARA NAVEGAR:
+      //onTap: () => Navigator.pushNamed(context, '/HomePage'),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        color: Colors.orange[200],
+        elevation: 10,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.laptop_mac, size: 60),
+              title: Text("Cliente: " + varNomeCliente,
+                  style: TextStyle(fontSize: 20.0)),
+              subtitle: Text("Aparelho: " + varProduto,
+                  style: TextStyle(fontSize: 14.0)),
+            ),
+            Divider(
+              color: Colors.black,
+              height: 30,
+              thickness: 0,
+              indent: 20,
+              endIndent: 20,
+            ),
+            ButtonBar(
+              children: <Widget>[
+                ElevatedButton(
+                  child: const Icon(Icons.edit),
+                  onPressed: () {
+                    modifyOSPage(varNomeCliente, varProduto, varDescricao,
+                        varObservacao, varId, varStatus);
+                  },
                 ),
-              ),
-            ],
-          ),
-        ],
+                ElevatedButton(
+                  child: const Icon(Icons.delete),
+                  onPressed: () async {
+                    await deleteOrdemServico(varId!);
+                    setState(() {
+                      final snackBar = SnackBar(
+                        content: Text("OS excluída!"),
+                        duration: Duration(seconds: 2),
+                      );
+                      ScaffoldMessenger.of(context)
+                        ..removeCurrentSnackBar()
+                        ..showSnackBar(snackBar);
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red, // background
+                    onPrimary: Colors.white, // foreground
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  _closedCard(varNomeCliente, varProduto, varDescricao, varObservacao, varId,
+      varStatus) {
+    return GestureDetector(
+      // CRIAR AQUI O BOTÃO PARA ABRIR DETALHES DA OS
+      // EXEMPLO PARA NAVEGAR:
+      //onTap: () => Navigator.pushNamed(context, '/HomePage'),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        color: Colors.blue[200],
+        elevation: 10,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.laptop_mac, size: 60),
+              title: Text("Cliente: " + varNomeCliente,
+                  style: TextStyle(fontSize: 20.0)),
+              subtitle: Text("Aparelho: " + varProduto,
+                  style: TextStyle(fontSize: 14.0)),
+            ),
+            Divider(
+              color: Colors.black,
+              height: 30,
+              thickness: 0,
+              indent: 20,
+              endIndent: 20,
+            ),
+            ButtonBar(
+              children: <Widget>[
+                ElevatedButton(
+                  child: const Icon(Icons.edit),
+                  onPressed: () {
+                    modifyOSPage(varNomeCliente, varProduto, varDescricao,
+                        varObservacao, varId, varStatus);
+                  },
+                ),
+                ElevatedButton(
+                  child: const Icon(Icons.delete),
+                  onPressed: () async {
+                    await deleteOrdemServico(varId!);
+                    setState(() {
+                      final snackBar = SnackBar(
+                        content: Text("Todo deleted!"),
+                        duration: Duration(seconds: 2),
+                      );
+                      ScaffoldMessenger.of(context)
+                        ..removeCurrentSnackBar()
+                        ..showSnackBar(snackBar);
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red, // background
+                    onPrimary: Colors.white, // foreground
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  modifyOSPage(varNomeCliente, varProduto, varDescricao, varObservacao, varId,
+      varStatus) {
+    String _selectedValue;
+    List<String> listOfValue = ['Pendente', 'Fechado'];
+
+    final nomeCliente = TextEditingController();
+    final produto = TextEditingController();
+    String status = "";
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            scrollable: true,
+            title: Text('Editar OS'),
+            content: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Form(
+                child: Column(
+                  children: <Widget>[
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Name',
+                      ),
+                      // initialValue: varNomeCliente,
+                      controller: nomeCliente,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Produto',
+                      ),
+                      //  initialValue: varProduto,
+                      controller: produto,
+                    ),
+                    DropdownButtonFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Status',
+                      ),
+                      value: varStatus,
+                      items: listOfValue.map((value) {
+                        return DropdownMenuItem(
+                          child: Text(value),
+                          value: value,
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedValue = value.toString();
+                          status = _selectedValue;
+                        });
+                      },
+                    ),
+                    // TextFormField(
+                    //   decoration: InputDecoration(
+                    //     labelText: 'Status',
+                    //   ),
+                    //initialValue: varStatus,
+                    // ),
+                  ],
+                ),
+              ),
+            ),
+            actions: [
+              ElevatedButton(
+                  child: Text("Submit"),
+                  onPressed: () async {
+                    ordemServico novaOrdemServico = ordemServico(
+                        nomeCliente: nomeCliente.text,
+                        produto: produto.text,
+                        descricao: varDescricao,
+                        observacao: varObservacao,
+                        status: status);
+                    await updateOrdemServico(varId, novaOrdemServico);
+                    Navigator.of(context).pop();
+                    setState(() {
+                      final snackBar = SnackBar(
+                        content: Text("OS Alterada!"),
+                        duration: Duration(seconds: 2),
+                      );
+                    });
+                  })
+            ],
+          );
+        });
   }
 
   buildCard() {
@@ -371,4 +529,33 @@ class _ModifyOSState extends State<ModifyOS> {
       ),
     );
   }
+}
+
+Future<List<ParseObject>> getOrdemServico() async {
+  QueryBuilder<ParseObject> queryTodo =
+      QueryBuilder<ParseObject>(ParseObject('OrdemServico'));
+  final ParseResponse apiResponse = await queryTodo.query();
+
+  if (apiResponse.success && apiResponse.results != null) {
+    return apiResponse.results as List<ParseObject>;
+  } else {
+    return [];
+  }
+}
+
+Future<void> updateOrdemServico(
+    String id, ordemServico novaOrdemServico) async {
+  var ordemServico = ParseObject('OrdemServico')
+    ..objectId = id
+    ..set('nomeCliente', novaOrdemServico.nomeCliente)
+    ..set('produto', novaOrdemServico.produto)
+    ..set('descricao', novaOrdemServico.descricao)
+    ..set('observacao', novaOrdemServico.observacao)
+    ..set('status', novaOrdemServico.status);
+  await ordemServico.save();
+}
+
+Future<void> deleteOrdemServico(String id) async {
+  var todo = ParseObject('OrdemServico')..objectId = id;
+  await todo.delete();
 }

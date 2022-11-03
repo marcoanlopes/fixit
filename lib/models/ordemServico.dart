@@ -4,6 +4,7 @@ class ordemServico {
   String? produto;
   String? descricao;
   String? observacao;
+  String? status;
 
   ordemServico({
     this.id,
@@ -11,6 +12,7 @@ class ordemServico {
     this.produto,
     this.descricao,
     this.observacao,
+    this.status,
   });
 
   ordemServico.fromJson(Map<String, dynamic> json) {
@@ -19,6 +21,7 @@ class ordemServico {
     produto = json['produto'];
     descricao = json['descricao'];
     observacao = json['observacao'];
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -28,6 +31,7 @@ class ordemServico {
     data['produto'] = this.produto;
     data['descricao'] = this.descricao;
     data['observacao'] = this.observacao;
+    data['status'] = this.status;
 
     return data;
   }
