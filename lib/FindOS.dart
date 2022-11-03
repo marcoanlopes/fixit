@@ -1,10 +1,20 @@
+import 'package:fixit/FindResultPage.dart';
 import 'package:flutter/material.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
-class FindOS extends StatelessWidget {
-  const FindOS({
+import 'models/ordemServico.dart';
+
+class FindOS extends StatefulWidget {
+  FindOS({
     Key? key,
   }) : super(key: key);
+  final nomeCliente = TextEditingController();
 
+  @override
+  _FindOS createState() => _FindOS();
+}
+
+class _FindOS extends State<FindOS> {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -21,6 +31,7 @@ class FindOS extends StatelessWidget {
                   border: OutlineInputBorder(),
                   labelText: 'Procurar...',
                   hintText: 'Digite o ID da OS'),
+              controller: widget.nomeCliente,
             ),
           ),
           Padding(
@@ -41,14 +52,11 @@ class FindOS extends StatelessWidget {
                 child: Row(
                   children: const [Icon(Icons.search), Text('Procurar')],
                 ),
-                onPressed: () {},
-                // child: FloatingActionButton(
-                //   tooltip: 'Search',
-                //   onPressed: () {},
-                //   child: Icon(
-                //     Icons.search,
-                //   ),
-                // ),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/FindResultPage', arguments: {
+                    'nomeCliente': widget.nomeCliente.text,
+                  });
+                },
               ),
             ),
           ),

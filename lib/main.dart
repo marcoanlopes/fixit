@@ -3,6 +3,7 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 import 'BranchPage.dart';
 import 'CustomerPage.dart';
+import 'FindResultPage.dart';
 import 'HomePage.dart';
 import 'PendingServiceOrderPage.dart';
 import 'ServiceOrderPage.dart';
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         '/BranchPage': (context) => BranchPage(),
         '/FinishedServiceOrderPage': (context) => FinishedServiceOrderPage(),
         '/PendingServiceOrderPage': (context) => PendingServiceOrderPage(),
+        '/FindResultPage': (context) => FindResultPage(),
       },
       home: Login(),
     );
