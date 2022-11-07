@@ -1,11 +1,11 @@
 import 'package:fixit/FindOS.dart';
 import 'package:flutter/material.dart';
 
-import 'CreateOS.dart';
 import 'ModifyOS.dart';
+import 'models_view/ordemServico_store.dart';
 
 class BottomNavBar extends StatefulWidget {
-  const BottomNavBar({Key? key}) : super(key: key);
+  BottomNavBar({Key? key}) : super(key: key);
 
   @override
   _BottomNavBarState createState() => _BottomNavBarState();
@@ -14,8 +14,10 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBarState extends State<BottomNavBar> {
   int _selectedIndex = 0;
 
+  ordemServico_store ordemServicoStore = ordemServico_store();
+
   static List<Widget> _pages = <Widget>[
-    CreateOS(),
+    //CreateOS(),
     FindOS(),
     ModifyOS(),
   ];
@@ -34,10 +36,10 @@ class _BottomNavBarState extends State<BottomNavBar> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.create),
-            label: 'Criar OS',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.create),
+          //   label: 'Criar OS',
+          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
             label: 'Procurar OS',

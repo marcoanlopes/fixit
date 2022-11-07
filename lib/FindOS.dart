@@ -54,6 +54,7 @@ class _FindOS extends State<FindOS> {
                   Navigator.pushNamed(context, '/FindResultPage', arguments: {
                     'nomeCliente': widget.nomeCliente.text,
                   });
+                  widget.nomeCliente.clear();
                 },
               ),
             ),

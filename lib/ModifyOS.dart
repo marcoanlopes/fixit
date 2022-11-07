@@ -1,254 +1,170 @@
 import 'package:fixit/models/ordemServico.dart';
+import 'package:fixit/models_view/ordemServico_store.dart';
 import 'package:flutter/material.dart';
-import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
-class ModifyOS extends StatefulWidget {
-  const ModifyOS({
+class ModifyOS extends StatelessWidget {
+  ModifyOS({
     Key? key,
   }) : super(key: key);
-  @override
-  _ModifyOSState createState() => _ModifyOSState();
-}
 
-class _ModifyOSState extends State<ModifyOS> {
+  ordemServico_store ordemServicoStore = ordemServico_store();
+
   @override
   Widget build(BuildContext context) {
+    Future<void> createOSPage(context, ordemServicoStore) async {
+      // String _selectedValue;
+      ordemServico os = ordemServico();
+      List<String> listOfValue = ['Pendente', 'Fechado'];
+
+      // final nomeCliente = TextEditingController();
+      // final produto = TextEditingController();
+      // String status = os.status;
+      return showDialog<void>(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              scrollable: true,
+              title: Text('Criar OS'),
+              content: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Form(
+                  child: Column(
+                    children: <Widget>[
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Name',
+                        ),
+                        onChanged: (value) {
+                          os.setNomeCliente(value);
+                        },
+                        initialValue: os.nomeCliente,
+                        //controller: nomeCliente,
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Produto',
+                          hintText: 'Digite qual o produto com problema',
+                        ),
+                        onChanged: (value) {
+                          os.setProduto(value);
+                        },
+                        initialValue: os.produto,
+                        //controller: produto,
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Descrição',
+                          hintText: 'Digite do problema',
+                        ),
+                        onChanged: (value) {
+                          os.setDescricao(value);
+                        },
+                        initialValue: os.descricao,
+                        //controller: produto,
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Observação',
+                          hintText: 'Alguma observação sobre o aparelho?',
+                        ),
+                        onChanged: (value) {
+                          os.setObservacao(value);
+                        },
+                        initialValue: os.observacao,
+                        //controller: produto,
+                      ),
+
+                      // TextFormField(
+                      //   decoration: InputDecoration(
+                      //     labelText: 'Status',
+                      //   ),
+                      //initialValue: varStatus,
+                      // ),
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                ElevatedButton(
+                    child: Text("Submit"),
+                    onPressed: () async {
+                      ordemServico novaOrdemServico = ordemServico(
+                          nomeCliente: os.nomeCliente,
+                          produto: os.produto,
+                          status: "Pendente",
+                          descricao: os.descricao,
+                          observacao: os.observacao,
+                          id: os.id);
+                      //os.setNomeCliente(novaOrdemServico.nomeCliente);
+                      print(novaOrdemServico.nomeCliente);
+                      print(novaOrdemServico.produto);
+                      print(novaOrdemServico.status);
+                      print(novaOrdemServico.descricao);
+                      print(novaOrdemServico.observacao);
+                      print(novaOrdemServico.id);
+                      ordemServicoStore.salvarOrdemServico(novaOrdemServico);
+                      Navigator.of(context).pop();
+                    })
+              ],
+            );
+          });
+    }
+
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Container(
-              padding: EdgeInsets.fromLTRB(17.0, 1.0, 7.0, 1.0), child: Row()),
-          Expanded(
-              child: FutureBuilder<List<ParseObject>>(
-                  future: getOrdemServico(),
-                  builder: (context, snapshot) {
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.none:
-                      case ConnectionState.waiting:
-                        return Center(
-                          child: Container(
-                              width: 100,
-                              height: 100,
-                              child: CircularProgressIndicator()),
-                        );
-                      default:
-                        if (snapshot.hasError) {
-                          return Center(
-                            child: Text("Error..."),
-                          );
-                        }
-                        if (!snapshot.hasData) {
-                          return Center(
-                            child: Text("No Data..."),
-                          );
-                        } else {
-                          return ListView.builder(
-                              padding: EdgeInsets.only(top: 10.0),
-                              itemCount: snapshot.data!.length,
-                              itemBuilder: (context, index) {
-                                //*************************************
-                                //Get Parse Object Values
-                                final varOrdemServico = snapshot.data![index];
-                                final varNomeCliente =
-                                    varOrdemServico.get('nomeCliente');
-                                final varProduto =
-                                    varOrdemServico.get('produto');
-                                final varObservacao =
-                                    varOrdemServico.get('observacao');
-                                final varDescricao =
-                                    varOrdemServico.get('descricao');
-                                final varStatus = varOrdemServico.get('status');
-                                final varId = varOrdemServico.get('objectId');
-                                //*************************************
-
-                                return Container(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(0.0),
-                                    child: SingleChildScrollView(
-                                      scrollDirection: Axis.vertical,
-                                      child: Column(
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.all(5.0),
-                                          ),
-                                          if (varStatus == "Pendente") ...[
-                                            _card(
-                                                varNomeCliente,
-                                                varProduto,
-                                                varDescricao,
-                                                varObservacao,
-                                                varId,
-                                                varStatus)
-                                          ] else if (varStatus ==
-                                              "Fechado") ...[
-                                            _closedCard(
-                                                varNomeCliente,
-                                                varProduto,
-                                                varDescricao,
-                                                varObservacao,
-                                                varId,
-                                                varStatus)
-                                          ]
-                                          // _card(
-                                          //     varNomeCliente,
-                                          //     varProduto,
-                                          //     varDescricao,
-                                          //     varObservacao,
-                                          //     varId),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-
-                                // title: Text(varNomeCliente),
-                                // subtitle: Text(varProduto),
-                                // trailing: Row(
-                                //   mainAxisSize: MainAxisSize.min,
-                                //   children: [
-                                //     IconButton(
-                                //       icon: Icon(
-                                //         Icons.delete,
-                                //         color: Colors.blue,
-                                //       ),
-                                //       onPressed: () async {
-                                //         await deleteOrdemServico(
-                                //             varOrdemServico.objectId!);
-                                //         setState(() {
-                                //           final snackBar = SnackBar(
-                                //             content: Text("Todo deleted!"),
-                                //             duration: Duration(seconds: 2),
-                                //           );
-                                //           ScaffoldMessenger.of(context)
-                                //             ..removeCurrentSnackBar()
-                                //             ..showSnackBar(snackBar);
-                                //         });
-                                //       },
-                                //     )
-                                //   ],
-                                // ),
-                              });
-                        }
-                    }
-                  }))
-        ],
+      body: Observer(
+        builder: (_) {
+          if (ordemServicoStore.isLoading) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return ListView.builder(
+            itemCount: ordemServicoStore.listaDeOrdemServico.length,
+            itemBuilder: (context, index) {
+              final os = ordemServicoStore.listaDeOrdemServico[index];
+              return Container(
+                child: Padding(
+                  padding: EdgeInsets.all(0.0),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(5.0),
+                        ),
+                        if (os.status == "Pendente") ...[
+                          _card(os, ordemServicoStore, context)
+                        ] else if (os.status == "Fechado") ...[
+                          _closedCard(os, context, ordemServicoStore)
+                        ]
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          createOSPage(context, ordemServicoStore);
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }
 
-//   Widget build(BuildContext context) {
-//     Expanded(
-//         child: FutureBuilder<List<ParseObject>>(
-//             future: getOrdemServico(),
-//             builder: (context, snapshot) {
-//               switch (snapshot.connectionState) {
-//                 case ConnectionState.none:
-//                 case ConnectionState.waiting:
-//                   return Center(
-//                     child: Container(
-//                         width: 100,
-//                         height: 100,
-//                         child: CircularProgressIndicator()),
-//                   );
-//                 default:
-//                   if (snapshot.hasError) {
-//                     return Center(
-//                       child: Text("Error..."),
-//                     );
-//                   }
-//                   if (!snapshot.hasData) {
-//                     return Center(
-//                       child: Text("No Data..."),
-//                     );
-//                   } else {
-//                     return ListView.builder(
-//                         padding: EdgeInsets.only(top: 10.0),
-//                         itemCount: snapshot.data!.length,
-//                         itemBuilder: (context, index) {
-//                           //*************************************
-//                           //Get Parse Object Values
-//                           final varOrdemServico = snapshot.data![index];
-//                           final varNomeCliente =
-//                               varOrdemServico.get('nomeCliente');
-//                           final varProduto = varOrdemServico.get('produto');
-//                           final varObservacao =
-//                               varOrdemServico.get('observacao');
-//                           final varDescricao = varOrdemServico.get('descricao');
-//                           //*************************************
-
-//                           return ListTile(
-//                             title: Text(varNomeCliente),
-//                             leading: CircleAvatar(),
-//                             trailing: Row(
-//                               mainAxisSize: MainAxisSize.min,
-//                               children: [
-//                                 //Checkbox(
-//                                 // value: varDone,
-//                                 // onChanged: (value) async {
-//                                 // await updateOrdemServico(
-//                                 //  varTodo.objectId!, value!);
-//                                 // setState(() {
-//                                 // //   //Refresh UI
-//                                 //  }),
-//                                 //  }),
-//                                 IconButton(
-//                                   icon: Icon(
-//                                     Icons.delete,
-//                                     color: Colors.blue,
-//                                   ),
-//                                   onPressed: () async {
-//                                     //await deleteOrdemServico(varTodo.objectId!);
-//                                     // setState(() {
-//                                     //   final snackBar = SnackBar(
-//                                     //     content: Text("Todo deleted!"),
-//                                     //     duration: Duration(seconds: 2),
-//                                     //   );
-//                                     //   ScaffoldMessenger.of(context)
-//                                     //     ..removeCurrentSnackBar()
-//                                     //     ..showSnackBar(snackBar);
-//                                     // });
-//                                   },
-//                                 )
-//                               ],
-//                             ),
-//                           );
-//                         });
-//                   }
-//               }
-//             }));
-
-//     return Container(
-//       child: Padding(
-//         padding: EdgeInsets.all(16.0),
-//         child: SingleChildScrollView(
-//           scrollDirection: Axis.vertical,
-//           child: Column(
-//             children: [
-//               Padding(
-//                 padding: EdgeInsets.all(16.0),
-//                 child: Text(
-//                   "Modificar Ordem de Serviço",
-//                   style: TextStyle(fontSize: 20),
-//                   textAlign: TextAlign.center,
-//                 ),
-//               ),
-//               // waitingCard(),
-//               // buildCard(),
-//               // _card(),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-  _card(varNomeCliente, varProduto, varDescricao, varObservacao, varId,
-      varStatus) {
+  _card(os, ordemServicoStore, context) {
     return GestureDetector(
       // CRIAR AQUI O BOTÃO PARA ABRIR DETALHES DA OS
       // EXEMPLO PARA NAVEGAR:
       //onTap: () => Navigator.pushNamed(context, '/HomePage'),
+      onTap: () => Navigator.pushNamed(context, '/FindResultPage', arguments: {
+        'nomeCliente': os.nomeCliente,
+      }),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
@@ -260,9 +176,9 @@ class _ModifyOSState extends State<ModifyOS> {
           children: <Widget>[
             ListTile(
               leading: Icon(Icons.laptop_mac, size: 60),
-              title: Text("Cliente: " + varNomeCliente,
+              title: Text("Cliente: " + os.nomeCliente,
                   style: TextStyle(fontSize: 20.0)),
-              subtitle: Text("Aparelho: " + varProduto,
+              subtitle: Text("Aparelho: " + os.produto,
                   style: TextStyle(fontSize: 14.0)),
             ),
             Divider(
@@ -276,24 +192,14 @@ class _ModifyOSState extends State<ModifyOS> {
               children: <Widget>[
                 ElevatedButton(
                   child: const Icon(Icons.edit),
-                  onPressed: () {
-                    modifyOSPage(varNomeCliente, varProduto, varDescricao,
-                        varObservacao, varId, varStatus);
+                  onPressed: () async {
+                    modifyOSPage(os, context, ordemServicoStore);
                   },
                 ),
                 ElevatedButton(
                   child: const Icon(Icons.delete),
                   onPressed: () async {
-                    await deleteOrdemServico(varId!);
-                    setState(() {
-                      final snackBar = SnackBar(
-                        content: Text("OS excluída!"),
-                        duration: Duration(seconds: 2),
-                      );
-                      ScaffoldMessenger.of(context)
-                        ..removeCurrentSnackBar()
-                        ..showSnackBar(snackBar);
-                    });
+                    ordemServicoStore.excluirOrdemServico(os);
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Colors.red, // background
@@ -308,12 +214,14 @@ class _ModifyOSState extends State<ModifyOS> {
     );
   }
 
-  _closedCard(varNomeCliente, varProduto, varDescricao, varObservacao, varId,
-      varStatus) {
+  _closedCard(os, context, ordemServicoStore) {
     return GestureDetector(
       // CRIAR AQUI O BOTÃO PARA ABRIR DETALHES DA OS
       // EXEMPLO PARA NAVEGAR:
       //onTap: () => Navigator.pushNamed(context, '/HomePage'),
+      onTap: () => Navigator.pushNamed(context, '/FindResultPage', arguments: {
+        'nomeCliente': os.nomeCliente,
+      }),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
@@ -325,9 +233,9 @@ class _ModifyOSState extends State<ModifyOS> {
           children: <Widget>[
             ListTile(
               leading: Icon(Icons.laptop_mac, size: 60),
-              title: Text("Cliente: " + varNomeCliente,
+              title: Text("Cliente: " + os.nomeCliente,
                   style: TextStyle(fontSize: 20.0)),
-              subtitle: Text("Aparelho: " + varProduto,
+              subtitle: Text("Aparelho: " + os.produto,
                   style: TextStyle(fontSize: 14.0)),
             ),
             Divider(
@@ -341,24 +249,14 @@ class _ModifyOSState extends State<ModifyOS> {
               children: <Widget>[
                 ElevatedButton(
                   child: const Icon(Icons.edit),
-                  onPressed: () {
-                    modifyOSPage(varNomeCliente, varProduto, varDescricao,
-                        varObservacao, varId, varStatus);
+                  onPressed: () async {
+                    modifyOSPage(os, context, ordemServicoStore);
                   },
                 ),
                 ElevatedButton(
                   child: const Icon(Icons.delete),
                   onPressed: () async {
-                    await deleteOrdemServico(varId!);
-                    setState(() {
-                      final snackBar = SnackBar(
-                        content: Text("Todo deleted!"),
-                        duration: Duration(seconds: 2),
-                      );
-                      ScaffoldMessenger.of(context)
-                        ..removeCurrentSnackBar()
-                        ..showSnackBar(snackBar);
-                    });
+                    ordemServicoStore.excluirOrdemServico(os);
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Colors.red, // background
@@ -373,15 +271,14 @@ class _ModifyOSState extends State<ModifyOS> {
     );
   }
 
-  modifyOSPage(varNomeCliente, varProduto, varDescricao, varObservacao, varId,
-      varStatus) {
-    String _selectedValue;
+  Future<void> modifyOSPage(os, context, ordemServicoStore) async {
+    // String _selectedValue;
     List<String> listOfValue = ['Pendente', 'Fechado'];
 
-    final nomeCliente = TextEditingController();
-    final produto = TextEditingController();
-    String status = varStatus;
-    showDialog(
+    // final nomeCliente = TextEditingController();
+    // final produto = TextEditingController();
+    // String status = os.status;
+    return showDialog<void>(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -397,30 +294,26 @@ class _ModifyOSState extends State<ModifyOS> {
                         labelText: 'Name',
                       ),
                       onChanged: (value) {
-                        setState(() {
-                          varNomeCliente = value.toString();
-                        });
+                        os.setNomeCliente(value);
                       },
+                      initialValue: os.nomeCliente,
                       //controller: nomeCliente,
-                      initialValue: varNomeCliente,
                     ),
                     TextFormField(
                       decoration: InputDecoration(
                         labelText: 'Produto',
                       ),
                       onChanged: (value) {
-                        setState(() {
-                          varProduto = value.toString();
-                        });
+                        os.setProduto(value);
                       },
+                      initialValue: os.produto,
                       //controller: produto,
-                      initialValue: varProduto,
                     ),
                     DropdownButtonFormField(
                       decoration: InputDecoration(
                         labelText: 'Status',
                       ),
-                      value: varStatus,
+                      value: os.status,
                       items: listOfValue.map((value) {
                         return DropdownMenuItem(
                           child: Text(value),
@@ -428,10 +321,7 @@ class _ModifyOSState extends State<ModifyOS> {
                         );
                       }).toList(),
                       onChanged: (value) {
-                        setState(() {
-                          _selectedValue = value.toString();
-                          status = _selectedValue;
-                        });
+                        os.setStatus(value);
                       },
                     ),
                     // TextFormField(
@@ -449,123 +339,24 @@ class _ModifyOSState extends State<ModifyOS> {
                   child: Text("Submit"),
                   onPressed: () async {
                     ordemServico novaOrdemServico = ordemServico(
-                        nomeCliente: varNomeCliente,
-                        produto: varProduto,
-                        descricao: varDescricao,
-                        observacao: varObservacao,
-                        status: status);
-                    await updateOrdemServico(varId, novaOrdemServico);
+                        nomeCliente: os.nomeCliente,
+                        produto: os.produto,
+                        status: os.status,
+                        descricao: os.descricao,
+                        observacao: os.observacao,
+                        id: os.id);
+                    //os.setNomeCliente(novaOrdemServico.nomeCliente);
+                    print(novaOrdemServico.nomeCliente);
+                    print(novaOrdemServico.produto);
+                    print(novaOrdemServico.status);
+                    print(novaOrdemServico.descricao);
+                    print(novaOrdemServico.observacao);
+                    print(novaOrdemServico.id);
+                    ordemServicoStore.atualizarOrdemServico(novaOrdemServico);
                     Navigator.of(context).pop();
-                    setState(() {
-                      final snackBar = SnackBar(
-                        content: Text("OS Alterada!"),
-                        duration: Duration(seconds: 2),
-                      );
-                    });
                   })
             ],
           );
         });
   }
-
-  buildCard() {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      color: Colors.orange[300],
-      elevation: 10,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          const ListTile(
-            leading: Icon(Icons.phone_android, size: 60),
-            title: Text('Exemplo', style: TextStyle(fontSize: 20.0)),
-            subtitle: Text('Aguardando conserto desde o dia dd/mm/aaaa',
-                style: TextStyle(fontSize: 12.0)),
-          ),
-          Divider(
-            color: Colors.black,
-            height: 30,
-            thickness: 0,
-            indent: 20,
-            endIndent: 20,
-          ),
-          ButtonBar(
-            children: <Widget>[
-              ElevatedButton(
-                child: const Text('Ir para OS'),
-                onPressed: () {/* ... */},
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Card waitingCard() {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      color: Colors.red[300],
-      elevation: 10,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          const ListTile(
-            leading: Icon(Icons.phone_iphone, size: 60),
-            title: Text('Exemplo', style: TextStyle(fontSize: 20.0)),
-            subtitle: Text('Orçamento não realizado',
-                style: TextStyle(fontSize: 14.0)),
-          ),
-          Divider(
-            color: Colors.black,
-            height: 30,
-            thickness: 0,
-            indent: 20,
-            endIndent: 20,
-          ),
-          ButtonBar(
-            children: <Widget>[
-              ElevatedButton(
-                child: const Text('Ir para OS'),
-                onPressed: () {/* ... */},
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-Future<List<ParseObject>> getOrdemServico() async {
-  QueryBuilder<ParseObject> queryTodo =
-      QueryBuilder<ParseObject>(ParseObject('OrdemServico'));
-  final ParseResponse apiResponse = await queryTodo.query();
-
-  if (apiResponse.success && apiResponse.results != null) {
-    return apiResponse.results as List<ParseObject>;
-  } else {
-    return [];
-  }
-}
-
-Future<void> updateOrdemServico(
-    String id, ordemServico novaOrdemServico) async {
-  var ordemServico = ParseObject('OrdemServico')
-    ..objectId = id
-    ..set('nomeCliente', novaOrdemServico.nomeCliente)
-    ..set('produto', novaOrdemServico.produto)
-    ..set('descricao', novaOrdemServico.descricao)
-    ..set('observacao', novaOrdemServico.observacao)
-    ..set('status', novaOrdemServico.status);
-  await ordemServico.save();
-}
-
-Future<void> deleteOrdemServico(String id) async {
-  var ordemServico = ParseObject('OrdemServico')..objectId = id;
-  await ordemServico.delete();
 }

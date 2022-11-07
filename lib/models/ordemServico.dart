@@ -24,7 +24,7 @@ class ordemServico = _ordemServico with _$ordemServico;
 
 abstract class _ordemServico with Store {
   _ordemServico({
-    this.id,
+    this.id = "",
     this.nomeCliente,
     this.produto,
     this.descricao,
@@ -32,7 +32,7 @@ abstract class _ordemServico with Store {
     this.status,
   });
 
-  int? id;
+  String id;
   @observable
   String? nomeCliente;
   @observable

@@ -86,12 +86,6 @@ class _FindResultPage extends State<FindResultPage> {
                                                 varId,
                                                 varStatus)
                                           ]
-                                          // _card(
-                                          //     varNomeCliente,
-                                          //     varProduto,
-                                          //     varDescricao,
-                                          //     varObservacao,
-                                          //     varId),
                                         ],
                                       ),
                                     ),
@@ -113,30 +107,41 @@ _card(
       // CRIAR AQUI O BOTÃO PARA ABRIR DETALHES DA OS
       // EXEMPLO PARA NAVEGAR:
       //onTap: () => Navigator.pushNamed(context, '/HomePage'),
-      Card(
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(15.0),
-    ),
-    color: Colors.orange[200],
-    elevation: 10,
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        ListTile(
-          leading: Icon(Icons.laptop_mac, size: 60),
-          title: Text("Cliente: " + varNomeCliente,
-              style: TextStyle(fontSize: 20.0)),
-          subtitle:
-              Text("Aparelho: " + varProduto, style: TextStyle(fontSize: 14.0)),
-        ),
-        Divider(
-          color: Colors.black,
-          height: 30,
-          thickness: 0,
-          indent: 20,
-          endIndent: 20,
-        ),
-      ],
+      Container(
+    height: 300,
+    child: Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      color: Colors.orange[200],
+      elevation: 10,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          ListTile(
+            leading: Icon(Icons.settings, size: 60),
+            title: Text("Cliente: " + varNomeCliente,
+                style: TextStyle(fontSize: 20.0)),
+            subtitle: Text("Aparelho: " + varProduto,
+                style: TextStyle(fontSize: 14.0)),
+          ),
+          Divider(
+            color: Colors.black,
+            height: 30,
+            thickness: 0,
+            indent: 20,
+            endIndent: 20,
+          ),
+          ListTile(
+            title: Text("Problema: \n" + varDescricao,
+                style: TextStyle(fontSize: 20.0)),
+          ),
+          ListTile(
+            subtitle: Text("\nObservação: \n" + varObservacao,
+                style: TextStyle(fontSize: 14.0)),
+          )
+        ],
+      ),
     ),
   );
 }
